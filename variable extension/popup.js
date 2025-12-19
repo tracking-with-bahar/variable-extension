@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) throw new Error('No active tab found');
 
-      // 🔹 Extract ONLY User-Defined Variables from GTM page
+      // Extract ONLY User-Defined Variables from GTM page
       const [{ result }] = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (result?.error) throw new Error(result.error);
 
-      // 🔹 Fetch variable references
+      // Fetch variable references
       const variables = await Promise.all(
         result.variables.map(async v => {
           try {
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       );
 
-      // 🔹 Build table
+      // Build table
       const table = document.createElement('table');
       table.style.width = '100%';
       table.style.borderCollapse = 'collapse';
@@ -117,3 +117,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchGTMData();
 });
+
