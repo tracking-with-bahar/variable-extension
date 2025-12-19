@@ -38,6 +38,7 @@ This extension reduces that to one view.
     </td>
     <td align="center">
       <b>From Downloaded Folder</b><br>
+      <p>Extract the Zip file</p>
       <img width="715" height="112" alt="image" src="https://github.com/user-attachments/assets/ee12f9f0-fad1-4b82-b94e-ef7ed8d67445">
     </td>
      <td align="center">
