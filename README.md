@@ -16,7 +16,7 @@ This tool helps identify where variables are used (tags and triggers) instantly 
 
 # Why This Exists
 
-- In complex GTM containers, answering questions like:
+In complex GTM containers, answering questions like:
 
 “Which tags are using this variable?”
 
