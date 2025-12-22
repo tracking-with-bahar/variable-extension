@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
-      ['Variable Name', 'Tags', 'Triggers'].forEach(text => {
+      ['Variables', 'Tags', 'Triggers'].forEach(text => {
         const th = document.createElement('th');
         th.textContent = text;
         th.style.border = '1px solid #ccc';
@@ -153,3 +153,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchGTMData();
 });
+
