@@ -29,5 +29,12 @@ h2{
   margin-top: 10px;
   text-align: center;
 }
+td {
+  border: 1px solid #ccc;
+  padding: 6px;
+  word-break: break-word;
+  white-space: normal;
+}
+
 
 
