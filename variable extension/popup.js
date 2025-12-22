@@ -12,31 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (!tab?.id) throw new Error('No active tab found');
 
-      // Extract ONLY User-Defined Variables from GTM page
+      //  Execute inside the GTM page
       const [{ result }] = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {
-        let reference = '/references';
           const vars = Array.from(
             document.querySelectorAll('a.fill-cell.wd-variable-name.md-gtm-theme')
-          )
-            .filter(el => {
-              const table = el.closest('[data-table-id]');
-              return (
-                table?.getAttribute('data-table-id') ===
-                'variable-list-user-defined'
-              );
-            })
-            .map(el => ({
+          ).filter(el =>
+            el.closest('[data-table-id]')?.getAttribute('data-table-id') === 'variable-list-user-defined'
+          );
+
+          if (!vars.length) return { error: 'No User-Defined Variables found. Open GTM Variables page.' };
+
+          const reference = '/references';
+          return {
+            variables: vars.map(el => ({
               name: el.textContent.trim(),
               url: 'https://tagmanager.google.com/api/accounts' + el.href.split('accounts')[1] + reference
-            }));
-
-          if (!vars.length) {
-            return { error: 'No User-Defined Variables found. Open GTM Variables page.' };
-          }
-
-          return { variables: vars };
+            }))
+          };
         }
       });
 
@@ -50,18 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const raw = await res.text();
             const clean = raw.replace(/^\)\]\}',?\n/, '');
             const parsed = JSON.parse(clean);
-
-            return {
-              variableName: v.name,
-              entities: parsed?.default?.entity || []
-            };
+            return { variableName: v.name, entities: parsed?.default?.entity || [] };
           } catch {
             return { variableName: v.name, entities: [] };
           }
         })
       );
 
-      // Build table
+      //  Build table
       const table = document.createElement('table');
       table.style.width = '100%';
       table.style.borderCollapse = 'collapse';
@@ -81,32 +71,79 @@ document.addEventListener('DOMContentLoaded', () => {
       const tbody = document.createElement('tbody');
 
       variables.forEach(v => {
-        const tags = v.entities
-          .filter(e => 'tagKey' in e)
-          .map(e => e.name || e.publicId);
-
-        const triggers = v.entities
-          .filter(e => 'triggerKey' in e)
-          .map(e => e.name || e.publicId);
+        const tags = v.entities.filter(e => 'tagKey' in e).map(e => e.name || e.publicId);
+        const triggers = v.entities.filter(e => 'triggerKey' in e).map(e => e.name || e.publicId);
 
         const tr = document.createElement('tr');
-
-        [v.variableName, tags.join(', ') || ' ', triggers.join(', ') || ' ']
-          .forEach(text => {
-            const td = document.createElement('td');
-            td.textContent = text;
-            td.style.border = '1px solid #ccc';
-            td.style.padding = '6px';
-            tr.appendChild(td);
-          });
-
+        [v.variableName, tags.join(', ') || ' ', triggers.join(', ') || ' '].forEach(text => {
+          const td = document.createElement('td');
+          td.textContent = text;
+          td.style.border = '1px solid #ccc';
+          td.style.padding = '6px';
+          tr.appendChild(td);
+        });
         tbody.appendChild(tr);
       });
 
       table.appendChild(tbody);
       container.appendChild(table);
-      loading.style.display = 'none';
 
+      // Add custom checkboxes and sync with GTM row checkboxes
+      tbody.querySelectorAll('tr').forEach(row => {
+        const firstCell = row.querySelector('td');
+        if (!firstCell || firstCell.querySelector('.custom-variable-checkbox')) return;
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'custom-variable-checkbox';
+        checkbox.style.marginRight = '8px';
+
+        const wrapper = document.createElement('span');
+        wrapper.style.display = 'inline-flex';
+        wrapper.style.alignItems = 'center';
+        wrapper.appendChild(checkbox);
+        firstCell.prepend(wrapper);
+
+        const variableName = row.querySelector('td').textContent.trim();
+
+        // Restore stored state
+        chrome.storage.sync.get(variableName, data => {
+          if (data[variableName] !== undefined) {
+            checkbox.checked = data[variableName];
+          }
+        });
+
+        // Sync GTM row checkbox and store state on change
+        checkbox.addEventListener('change', async () => {
+          // Store state
+          chrome.storage.sync.set({ [variableName]: checkbox.checked });
+
+          const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+          if (!tab?.id) return;
+
+          chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            func: (name, checked) => {
+              const vars = Array.from(
+                document.querySelectorAll('a.fill-cell.wd-variable-name.md-gtm-theme')
+              ).filter(el =>
+                el.closest('[data-table-id]')?.getAttribute('data-table-id') === 'variable-list-user-defined'
+              );
+
+              const el = vars.find(v => v.textContent.trim() === name);
+              if (!el) return;
+
+              const rowCheckbox = el.parentElement.parentElement.querySelector('i.wd-table-row-checkbox[role="checkbox"]');
+              if (rowCheckbox && (rowCheckbox.getAttribute('aria-checked') === 'true') !== checked) {
+                rowCheckbox.click();
+              }
+            },
+            args: [variableName, checkbox.checked]
+          });
+        });
+      });
+
+      loading.style.display = 'none';
     } catch (err) {
       loading.style.display = 'none';
       errorDiv.textContent = err.message;
