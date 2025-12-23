@@ -4,6 +4,8 @@ A custom Chrome extension that displays Tag and Trigger references for Google Ta
 
 This extension helps identify where variables are used (tags and triggers) instantly — without clicking into each entity manually.
 
+Remove unwanted variables.
+
 # Features:
 
 - Lists User-Defined GTM Variables only
