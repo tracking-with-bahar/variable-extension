@@ -12,7 +12,7 @@ This extension helps identify where variables are used (tags and triggers) insta
 
 - Works inside the GTM interface (no exports required)
 
-- Fast, lightweight, and UI-safe (no brittle selectors)
+- Corresponding variable is automatically selected in the GTM Variables section
 
 # Why This Exists
 
