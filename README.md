@@ -14,7 +14,7 @@ Remove unwanted variables.
 
 - Works inside the GTM interface (no exports required)
 
-- Corresponding variable is automatically selected in the GTM Variables section
+- You can select any of GTM's variables from the Chrome extension interface
 
 # Why This Exists
 
