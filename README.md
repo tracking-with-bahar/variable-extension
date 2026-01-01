@@ -10,7 +10,7 @@ Remove unwanted variables.
 
 - Lists User-Defined GTM Variables only
 
-- Shows Tags and Triggers that reference each variable
+- Shows the tags, triggers, and variables that refer to each variable
 
 - Works inside the GTM interface (no exports required)
 
