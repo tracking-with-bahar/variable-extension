@@ -1,8 +1,8 @@
 # GTM Variable References Chrome Extension
 
-A custom Chrome extension that displays Tag and Trigger references for Google Tag Manager variables directly from the GTM UI.
+This Chrome extension that displays Tag, Trigger and variable references for Google Tag Manager variables directly from the GTM UI.
 
-This extension helps identify where variables are used (tags and triggers) instantly — without clicking into each entity manually.
+This extension helps identify where variables are used (tags, triggers, and variables) instantly — without clicking into each entity manually.
 
 Remove unwanted variables.
 
