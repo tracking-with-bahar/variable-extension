@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Build table
       const table = document.createElement('table');
       table.style.width = '100%';
-      table.style.borderCollapse = 'collapse';
 
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
@@ -186,5 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchGTMData();
 });
+
 
 
