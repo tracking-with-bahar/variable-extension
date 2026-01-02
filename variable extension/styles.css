@@ -34,6 +34,9 @@ td {
   padding: 6px;
   word-break: break-word;
   white-space: normal;
+  box-shadow:
+  0 2px 4px rgba(0, 0, 0, 0.15),
+  0 6px 12px rgba(0, 0, 0, 0.08);
 }
 input[type="checkbox"]:hover {
   cursor: pointer;
@@ -46,6 +49,7 @@ input[type="checkbox"] {
 th {
   background-color: #f1eeee;
 }
+
 
 
 
