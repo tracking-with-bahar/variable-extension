@@ -100,6 +100,17 @@ td:nth-child(2){
 td:nth-child(1){
   width: 60px;
 }
+
+#variable-list > table > tbody > tr > td:nth-child(6) {
+  cursor: pointer;
+  text-align: center;
+  width: 40px;
+  color: #ff4d4f;
+  font-size: 18px;
+  user-select: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
 /* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
   width: 8px;
