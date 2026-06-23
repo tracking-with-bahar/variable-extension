@@ -100,6 +100,29 @@ td:nth-child(2){
 td:nth-child(1){
   width: 60px;
 }
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
 
 
 
